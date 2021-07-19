@@ -37,7 +37,7 @@ on:
       vm_size:
         description: 'Node vm size'     
         required: false
-        default: 'A2m_v2'
+        default: 'standard_a2m_v2'
       load_balancer_sku:
         description: 'Load balancer SKU'     
         required: false
