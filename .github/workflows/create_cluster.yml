@@ -5,15 +5,36 @@ name: CI
 # Controls when the workflow will run
 on:
   workflow_dispatch:
-  
-env:
-  resource_group: dodevza-default
-  subscription: Free Account
-  cluster_name: dodevza-k8s-cluster
-  registry_name: dodevza-k8s-registry
-  node_count: 1
-  vm_size: A2m_v2
-  load_balancer_sku: Basic # Or Standard
+    inputs:
+      resource_group:
+        description: 'Resource Group'     
+        required: false
+        default: 'dodevza-default'
+      subscription:
+        description: 'Subscription'     
+        required: false
+        default: 'Free Account'
+      cluster_name:
+        description: 'K8s Clustername'     
+        required: false
+        default: 'dodevza-k8s-cluster'
+      registry_name:
+        description: 'ACR Registry name'     
+        required: false
+        default: 'dodevza-k8s-registry'
+      node_count:
+        description: 'Node Count'     
+        required: false
+        default: '1'
+      vm_size:
+        description: 'Node vm size'     
+        required: false
+        default: 'A2m_v2'
+      load_balancer_sku:
+        description: 'Load balancer SKU'     
+        required: false
+        default: 'Basic'  
+
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -35,7 +56,7 @@ jobs:
 
       # Create Cluster
       - name: Run a multi-line script
-        run: az aks create -n ${{ env.cluster_name }} -s "${{ env.subscription }}" -g "${{ env.resource_group }}" --node-count ${{ env.node_count }} -s ${{ env.vm_size }} --load-balancer-sku ${{ env.load_balancer_sku }} --enable-aad --enable-azure-rbac  --yes
+        run: az aks create -n ${{ github.event.inputs.cluster_name }} -s "${{ github.event.inputs.subscription }}" -g "${{ github.event.inputs.resource_group }}" --node-count ${{ github.event.inputs.node_count }} -s ${{ github.event.inputs.vm_size }} --load-balancer-sku ${{ github.event.inputs.load_balancer_sku }} --enable-aad --enable-azure-rbac  --yes
 
       - name: Azure CLI script
         uses: azure/CLI@v1
