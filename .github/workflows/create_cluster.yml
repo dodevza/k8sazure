@@ -14,6 +14,10 @@ on:
         description: 'Resource Group'     
         required: false
         default: 'dodevza-default'
+      location:
+        description: 'Location'
+        required: false
+        default: 'southafricanorth'
       subscription:
         description: 'Subscription'     
         required: false
@@ -63,8 +67,8 @@ jobs:
       # Create Resource Group If Not exists
       - name: Create Resouce Group
         run: |
-          if [ $(az group exists --name "${{ github.event.inputs.resource_group }}") = false ]; then
-            az group create --name "${{ github.event.inputs.resource_group }}" --location $LOCATION
+          if [ $(az group exists --name "${{ github.event.inputs.resource_group }}" -l "${{github.event.inputs.location}}") = false ]; then
+            az group create --name "${{ github.event.inputs.resource_group }}" -l "${{github.event.inputs.location}}"
           fi
       # Create Cluster
       - name: Run a multi-line script
