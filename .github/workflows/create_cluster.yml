@@ -67,7 +67,7 @@ jobs:
       # Create Resource Group If Not exists
       - name: Create Resouce Group
         run: |
-          if [ $(az group exists --name "${{ github.event.inputs.resource_group }}" -l "${{github.event.inputs.location}}") = false ]; then
+          if [ $(az group exists --name "${{ github.event.inputs.resource_group }}") = false ]; then
             az group create --name "${{ github.event.inputs.resource_group }}" -l "${{github.event.inputs.location}}"
           fi
       # Create Cluster
