@@ -1,0 +1,47 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  workflow_dispatch:
+  
+env:
+  resource_group: dodevza-default
+  subscription: Free Account
+  cluster_name: dodevza-k8s-cluster
+  registry_name: dodevza-k8s-registry
+  node_count: 1
+  vm_size: A2m_v2
+  load_balancer_sku: Basic # Or Standard
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  create:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Runs a single command using the runners shell
+      - uses: azure/login@v1
+        name: Login to azure
+        with:
+          creds: ${{ secrets.AZ_DEPLOY_CRED }}
+
+      # Create Cluster
+      - name: Run a multi-line script
+        run: az aks create -n ${{ env.cluster_name }} -s "${{ env.subscription }}" -g "${{ env.resource_group }}" --node-count ${{ env.node_count }} -s ${{ env.vm_size }} --load-balancer-sku ${{ env.load_balancer_sku }} --enable-aad --enable-azure-rbac  --yes
+
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+          azcliversion: 2.0.72
+          inlineScript: |
+            az logout
+            az cache purge
+            az account clear
