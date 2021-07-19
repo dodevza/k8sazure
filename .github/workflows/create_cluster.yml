@@ -62,7 +62,7 @@ jobs:
 
       # Create Cluster
       - name: Run a multi-line script
-        run: az aks create -n ${{ github.event.inputs.cluster_name }} -s "${{ github.event.inputs.subscription }}" -g "${{ github.event.inputs.resource_group }}" --node-count ${{ github.event.inputs.node_count }} -s ${{ github.event.inputs.vm_size }} --load-balancer-sku ${{ github.event.inputs.load_balancer_sku }} --enable-aad --enable-azure-rbac  --yes
+        run: az aks create -n ${{ github.event.inputs.cluster_name }} -s "${{ github.event.inputs.subscription }}" -g "${{ github.event.inputs.resource_group }}" --node-count ${{ github.event.inputs.node_count }} -s ${{ github.event.inputs.vm_size }} --load-balancer-sku ${{ github.event.inputs.load_balancer_sku }} --generate-ssh-keys --enable-aad --enable-azure-rbac  --yes
 
       - name: Azure CLI script
         uses: azure/CLI@v1
